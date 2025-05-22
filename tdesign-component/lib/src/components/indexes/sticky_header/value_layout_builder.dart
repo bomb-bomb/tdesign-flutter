@@ -66,7 +66,13 @@ class ValueLayoutBuilder<T> extends ConstrainedLayoutBuilder<BoxValueConstraints
 }
 
 class _RenderValueLayoutBuilder<T> extends RenderBox
-    with RenderObjectWithChildMixin<RenderBox>, RenderConstrainedLayoutBuilder<BoxValueConstraints<T>, RenderBox> {
+    with RenderObjectWithChildMixin<RenderBox>, RenderObjectWithLayoutCallbackMixin, RenderConstrainedLayoutBuilder<BoxValueConstraints<T>, RenderBox> {
+  
+  @override
+  void layoutCallback() {
+    // 实现必要的布局回调逻辑
+  }
+
   @override
   double computeMinIntrinsicWidth(double height) {
     assert(_debugThrowIfNotCheckingIntrinsics());
@@ -94,7 +100,7 @@ class _RenderValueLayoutBuilder<T> extends RenderBox
   @override
   void performLayout() {
     final constraints = this.constraints;
-    rebuildIfNecessary();
+    runLayoutCallback();
     if (child != null) {
       child!.layout(constraints, parentUsesSize: true);
       size = constraints.constrain(child!.size);
